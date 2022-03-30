@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 //runApp() is the function responsible for running the app.
 //The app is represented by the main widget, in this case MyApp instance.\
 //Everything in Flutter is called as a widget.
