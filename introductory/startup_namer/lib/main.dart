@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
       title: "Startup Name Generator",
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.red,
           foregroundColor: Colors.black,
         ),
       ),
@@ -117,7 +117,8 @@ class _RandomWordsState extends State<RandomWords> {
             _suggestions.addAll(generateWordPairs().take(10));
           }
           return _buildRow(_suggestions[index]);
-        });
+        }, 
+        );
   }
 
   Widget _buildRow(WordPair pair) {
@@ -134,7 +135,8 @@ class _RandomWordsState extends State<RandomWords> {
         ),
         onTap: () {
           setState(
-              () => isAlreadySaved ? _saved.remove(pair) : _saved.add(pair));
+              () => isAlreadySaved ? _saved.remove(pair) : _saved.add(pair)
+          );
         });
   }
 
