@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/models/task.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -8,6 +9,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController textController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -25,7 +27,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.all(20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                 child: TextFormField(
                   validator: (value) {
                     String valueStr = value.toString();
@@ -81,6 +84,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ),
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                  controller: textController,
                 ),
               ),
               Row(
@@ -89,12 +96,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Container(
                       margin: const EdgeInsets.symmetric(
                         vertical: 10,
-                        horizontal: 10,
+                        horizontal: 5,
                       ),
                       height: 55,
                       child: ElevatedButton(
                         onPressed: () {
-                          formKey.currentState!.validate();
+                          // FocusScope.of(context).unfocus();
+                          if (formKey.currentState!.validate()) {
+                            Task task = Task(textController.text);
+                            Navigator.pop(context, task);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Registered")),
+                            );
+                            // setState(() => textController.text = "");
+                          }
                         },
                         child: const Text("Register"),
                         style: ElevatedButton.styleFrom(

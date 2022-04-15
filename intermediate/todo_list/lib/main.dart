@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'register_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/register_screen.dart';
 
 void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.purple,
+        primaryColor: Colors.deepPurpleAccent,
       ),
       initialRoute: "/",
       routes: {
