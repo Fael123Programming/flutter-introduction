@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  final Task? task;
+  final bool editing;
+
+  const RegisterScreen({Key? key, this.task, this.editing = false})
+      : super(key: key);
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -11,6 +15,15 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController textController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.task == null) {
+      return;
+    }
+    setState(() => textController.text = widget.task!.text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,14 +114,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 55,
                       child: ElevatedButton(
                         onPressed: () {
-                          // FocusScope.of(context).unfocus();
                           if (formKey.currentState!.validate()) {
                             Task task = Task(textController.text);
                             Navigator.pop(context, task);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Registered")),
-                            );
-                            // setState(() => textController.text = "");
+                            if (widget.editing) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Edited"),
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Registered"),
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                            }
                           }
                         },
                         child: const Text("Register"),
