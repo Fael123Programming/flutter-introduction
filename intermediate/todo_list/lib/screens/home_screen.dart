@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   secondaryBackground: Container(
                     color: Colors.red,
                     child: const Align(
-                      alignment: Alignment(-0.9, 0),
+                      alignment: Alignment(0.9, 0),
                       child: Icon(
                         Icons.delete,
                         color: Colors.white,
@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   confirmDismiss: (direction) async {
                     if (direction == DismissDirection.startToEnd) {
+                      //Scrolling from left to right, edit the task.
                       Task editedTask = await Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -66,16 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       );
-                      if (editedTask != null) {
-                        setState(
-                          () {
-                            tasks.removeAt(position);
-                            tasks.insert(position, editedTask);
-                          },
-                        );
-                      }
-                      return false;
+                      setState(
+                        () {
+                          tasks.removeAt(position);
+                          tasks.insert(position, editedTask);
+                        },
+                      );
+                      return false; //Do not delete.
                     } else {
+                      //Scrolling from right to left, deletes the task.
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Deleted"),
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(
                         () => tasks.removeAt(position),
                       );
-                      return true;
+                      return true; //Delete it.
                     }
                   },
                   child: ListTile(
@@ -111,9 +111,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       );
-                      if (editedTask == null) {
-                        return;
-                      }
                       setState(() {
                         tasks.removeAt(position);
                         tasks.insert(position, editedTask);

@@ -134,7 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             }
                           }
                         },
-                        child: const Text("Register"),
+                        child: Text(widget.task == null ? "Register" : "Edit"),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
                         ),
