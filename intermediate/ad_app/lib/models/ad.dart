@@ -1,6 +1,6 @@
 class Ad {
-  late String? title, description;
-  late double? price;
+  late String title, description;
+  late double price;
 
-  Ad({this.title, this.description, this.price});
+  Ad({required this.title, required this.description, required this.price});
 }

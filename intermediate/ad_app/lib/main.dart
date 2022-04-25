@@ -7,7 +7,7 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.yellowAccent,
+        primaryColor: Colors.blue,
       ),
       initialRoute: "/",
       routes: {

@@ -17,7 +17,27 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ad App"),
+        title: const Text(
+          "Ad App",
+          style: TextStyle(
+            fontFamily: "Arial",
+            shadows: <Shadow>[
+              Shadow(
+                offset: Offset(
+                  1.0,
+                  1.0,
+                ),
+                blurRadius: 3.0,
+                color: Color.fromARGB(
+                  255,
+                  0,
+                  0,
+                  0,
+                ),
+              ),
+            ],
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -60,24 +80,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   confirmDismiss: (direction) async {
                     if (direction == DismissDirection.startToEnd) {
-                      Ad editedAd = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegisterScreen(
-                            ad: ad,
-                            editing: true,
+                      try {
+                        Ad editedAd = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RegisterScreen(
+                              ad: ad,
+                              editing: true,
+                            ),
                           ),
-                        ),
-                      );
-                      setState(
-                        () {
-                          ads.removeAt(position);
-                          ads.insert(
-                            position,
-                            editedAd,
-                          );
-                        },
-                      );
+                        );
+                        setState(
+                          () {
+                            ads.removeAt(position);
+                            ads.insert(
+                              position,
+                              editedAd,
+                            );
+                          },
+                        );
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Canceled"),
+                            duration: Duration(
+                              seconds: 1,
+                            ),
+                          ),
+                        );
+                        setState(() {});
+                      }
                       return false; //Do not delete it.
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -92,10 +124,77 @@ class _HomeScreenState extends State<HomeScreen> {
                       return true; //Do delete it.
                     }
                   },
-                  child: ListTile();
+                  child: ListTile(
+                    title: Text(
+                      ad.title,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    subtitle: Text(
+                      ad.description + "\n" + "\$" + ad.price.toString(),
+                    ),
+                    isThreeLine: true,
+                    dense: true,
+                    // leading: const Icon(Icons.shopping_cart),
+                    trailing: const Icon(
+                      Icons.shopping_cart,
+                    ),
+                    onTap: () => {
+                      //Make that if the user tap it, the screen get zoomed.
+                    },
+                    onLongPress: () async {
+                      Ad editedAd = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterScreen(
+                            ad: ad,
+                            editing: true,
+                          ),
+                        ),
+                      );
+                      setState(
+                        () {
+                          ads.removeAt(position);
+                          ads.insert(position, editedAd);
+                        },
+                      );
+                    },
+                  ),
                 );
               },
+              separatorBuilder: (context, position) => const Divider(),
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          try {
+            Ad ad = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const RegisterScreen(),
+              ),
+            );
+            //An exception is thrown if not an Ad instance is returned from Navigator.push(), that is, a try of assigning a non-nullable variable with null.
+            setState(() => ads.add(ad));
+          } catch (error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Canceled",
+                ),
+                duration: Duration(
+                  seconds: 1,
+                ),
+              ),
+            );
+          }
+        },
+        child: const Icon(
+          Icons.add_circle,
+          color: Colors.white,
+        ),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
     );
   }
 }
