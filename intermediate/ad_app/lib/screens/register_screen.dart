@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ad_app/models/ad.dart';
-import '../models/number_validator.dart';
 
 class RegisterScreen extends StatefulWidget {
   final Ad? ad;
