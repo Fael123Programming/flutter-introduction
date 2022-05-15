@@ -14,36 +14,32 @@ class FilePersistence extends DataPersistenceEntity {
   }
 
   @override
-  void saveData(List<Task> tasks) async {
+  void create(Task task) async {
     final localFile = await _getLocalFile();
-    List mapTasksList = [];
-    for (var task in tasks) {
-      mapTasksList.add(task.toMapFile());
-    }
-    String jsonTasks = json.encode(mapTasksList);
-    localFile.writeAsStringSync(jsonTasks, flush: true);
+    String jsonTask = json.encode(task.toMap());
+    localFile.writeAsStringSync(jsonTask, flush: true, mode: FileMode.append);
   }
 
   @override
-  Future<List<Task>> readData() async {
+  Future<List<Task>> readAll() async {
     List<Task> tasks = [];
     try {
       final localFile = await _getLocalFile();
       String jsonTasks = await localFile.readAsString();
-      List jsonTasksList = json.decode(jsonTasks);
-      for (var task in jsonTasksList) {
-        tasks.add(Task.fromMapFile(task));
+      List mapTasksList = json.decode(jsonTasks);
+      for (var task in mapTasksList) {
+        tasks.add(Task.fromMap(task));
       }
     } catch (error) {}
     return tasks;
   }
 
   @override
-  Future<Task?>? readDataById(int id) async {
+  Future<Task?>? readById(int id) async {
     if (id < 0) {
       return null;
     }
-    List<Task> tasks = await readData();
+    List<Task> tasks = await readAll();
     for (Task task in tasks) {
       if (task.id == id) {
         return task;
@@ -51,4 +47,10 @@ class FilePersistence extends DataPersistenceEntity {
     }
     return null;
   }
+
+  @override
+  void update(Task task) {}
+
+  @override
+  void delete(int id) {}
 }

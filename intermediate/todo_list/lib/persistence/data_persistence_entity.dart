@@ -1,9 +1,17 @@
 import 'package:todo_list/models/task.dart';
 
 abstract class DataPersistenceEntity {
-  void saveData(List<Task> tasks);
+  void create(Task task);
 
-  Future<List<Task>> readData();
+  Future<List<Task>> readAll();
 
-  Future<Task?>? readDataById(int id);
+  Future<Task?>? readById(int id);
+
+  void update(Task task);
+
+  void delete(int id);
+
+  bool isInvalidId(int id) {
+    return id < 0;
+  }
 }

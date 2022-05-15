@@ -1,15 +1,40 @@
-class DatabaseHelper {
-  static const mainTable = 'task';
-  static const idColumn = 'id';
-  static const textColumn = 'text';
-  static const doneColumn = 'done';
-  static const columnsList = [idColumn, textColumn, doneColumn];
+import 'package:sqflite/sqflite.dart';
+import 'package:todo_list/persistence/database_persistence.dart';
 
-  static String get createMainTableSQLStatement {
-    return 'CREATE TABLE $mainTable ($idColumn INTEGER PRIMARY KEY AUTOINCREMENT, $textColumn TEXT NOT NULL, $doneColumn INTEGER NOT NULL);';
+class DatabaseHelper {
+  Database? _db;
+  static final _instance = DatabaseHelper.internal();
+  static const databaseName = 'taskDatabase.db';
+
+  DatabaseHelper.internal();
+
+  factory DatabaseHelper() => _instance;
+
+  Future<Database?> get db async {
+    //If _db is null it will receive the result of initDb().
+    //Finally, its value will be returned.
+    return _db ??= await initDb();
   }
 
-  static String get rebuildMainTableSQLStatement {
-    return 'DROP TABLE $mainTable;$createMainTableSQLStatement';
+  Future<Database?> initDb() async {
+    final databasePath = await getDatabasesPath();
+    final path = '$databasePath/$databaseName';
+    try {
+      _db = await openDatabase(path,
+          version: 1, onCreate: _onCreateDb, onUpgrade: _onUpgradeDb);
+    } catch (error) {
+      _db = null;
+    }
+    return _db;
+  }
+
+  Future _onCreateDb(Database db, int newVersion) async {
+    await db.execute(DatabasePersistence.createMainTableSQLStatement);
+  }
+
+  Future _onUpgradeDb(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < newVersion) {
+      await db.execute(DatabasePersistence.rebuildMainTableSQLStatement);
+    }
   }
 }

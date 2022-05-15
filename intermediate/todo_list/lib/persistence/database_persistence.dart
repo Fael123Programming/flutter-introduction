@@ -4,61 +4,37 @@ import 'package:todo_list/persistence/database_helper.dart';
 import 'package:todo_list/models/task.dart';
 
 class DatabasePersistence extends DataPersistenceEntity {
-  Database? _db;
-  static final _instance = DatabasePersistence.internal();
-  static const databaseName = 'taskDatabase.db';
+  static const mainTable = 'task';
+  static const idColumn = 'id';
+  static const textColumn = 'text';
+  static const doneColumn = 'done';
+  static const columnsList = [idColumn, textColumn, doneColumn];
 
-  DatabasePersistence.internal();
-
-  factory DatabasePersistence() => _instance;
-
-  Future<Database?> get db async {
-    //If _db is null it will receive the result of initDb().
-    //Finally, its value will be returned.
-    return _db ??= await initDb();
+  static String get createMainTableSQLStatement {
+    return 'CREATE TABLE $mainTable ($idColumn INTEGER PRIMARY KEY AUTOINCREMENT, $textColumn TEXT NOT NULL, $doneColumn INTEGER NOT NULL);';
   }
 
-  Future<Database?> initDb() async {
-    final databasePath = await getDatabasesPath();
-    final path = '$databasePath/$databaseName';
-    try {
-      _db = await openDatabase(path,
-          version: 1, onCreate: _onCreateDb, onUpgrade: _onUpgradeDb);
-    } catch (error) {
-      _db = null;
-    }
-    return _db;
-  }
-
-  Future _onCreateDb(Database db, int newVersion) async {
-    await db.execute(DatabaseHelper.createMainTableSQLStatement);
-  }
-
-  Future _onUpgradeDb(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < newVersion) {
-      await db.execute(DatabaseHelper.rebuildMainTableSQLStatement);
-    }
+  static String get rebuildMainTableSQLStatement {
+    return 'DROP TABLE $mainTable;$createMainTableSQLStatement';
   }
 
   @override
-  void saveData(List<Task> tasks) async {
-    Database? db = await DatabasePersistence().db;
+  void create(Task task) async {
+    Database? db = await DatabaseHelper().db;
     if (db == null) {
       return;
     }
-    for (Task task in tasks) {
-      task.id = await db.insert(DatabaseHelper.mainTable, task.toMapBd());
-    }
+    task.id = await db.insert(mainTable, task.toMap());
   }
 
   @override
-  Future<List<Task>> readData() async {
-    Database? db = await DatabasePersistence().db;
+  Future<List<Task>> readAll() async {
+    Database? db = await DatabaseHelper().db;
     if (db == null) {
       return [];
     }
-    List<Map> tasksFromDb = await db.query(DatabaseHelper.mainTable,
-        columns: DatabaseHelper.columnsList);
+    List<Map> tasksFromDb = await db.query(mainTable,
+        columns: columnsList);
     List<Task> tasks = [];
     for (Map map in tasksFromDb) {
       tasks.add(Task.fromMapDb(map));
@@ -67,17 +43,40 @@ class DatabasePersistence extends DataPersistenceEntity {
   }
 
   @override
-  Future<Task?>? readDataById(int id) async {
+  Future<Task?>? readById(int id) async {
     Database? db;
-    if (id < 0 || (db = await DatabasePersistence().db) == null) {
+    if (isInvalidId(id) || (db = await DatabaseHelper().db) == null) {
       return null;
     }
     List<Map> taskFromDb = await db!.query(
-      DatabaseHelper.mainTable,
-      columns: DatabaseHelper.columnsList,
-      where: '${DatabaseHelper.idColumn} = ?',
+      mainTable,
+      columns: columnsList,
+      where: '$idColumn = ?',
       whereArgs: [id],
     );
     return Task.fromMapDb(taskFromDb.first);
+  }
+
+  @override
+  void update(Task task) async {
+    Database? db = await DatabaseHelper().db;
+    if (db == null) {
+      return;
+    }
+    await db.update(mainTable, task.toMap(),
+        where: '$idColumn = ?', whereArgs: [task.id]);
+  }
+
+  @override
+  void delete(int id) async {
+    if (isInvalidId(id)) {
+      return;
+    }
+    Database? db = await DatabaseHelper().db;
+    if (db == null) {
+      return;
+    }
+    await db.delete(mainTable,
+        where: '$idColumn = ?', whereArgs: [id]);
   }
 }
