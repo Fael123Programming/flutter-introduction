@@ -1,23 +1,38 @@
 class Task {
+  int? id;
   late String text;
   bool done = false;
 
   Task(this.text);
 
-  Task.fromMap(Map task) {
-    for (var key in task.keys) {
-      if (key != 'text' && key != 'done') {
-        throw 'invalid key: $key';
-      }
-    }
+  Task.fromMapFile(Map task) {
     text = task['text'];
     done = task['done'];
   }
 
-  Map toMap() {
+  Map toMapFile() {
     return {
       'text': text,
       'done': done,
     };
+  }
+
+  Task.fromMapDb(Map task) {
+    id = task['id'];
+    text = task['text'];
+    done = task['done'] == 1 ? true : false; //SQLite does not have bool type.
+  }
+
+  Map<String, dynamic> toMapBd() {
+    return {
+      'id': id,
+      'text': text,
+      'done': done,
+    };
+  }
+
+  @override
+  String toString() {
+    return "Task(id: $id, text: $text, done: $done)";
   }
 }

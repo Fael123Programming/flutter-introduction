@@ -18,7 +18,7 @@ class FilePersistence extends DataPersistenceEntity {
     final localFile = await _getLocalFile();
     List mapTasksList = [];
     for (var task in tasks) {
-      mapTasksList.add(task.toMap());
+      mapTasksList.add(task.toMapFile());
     }
     String jsonTasks = json.encode(mapTasksList);
     localFile.writeAsStringSync(jsonTasks, flush: true);
@@ -32,11 +32,23 @@ class FilePersistence extends DataPersistenceEntity {
       String jsonTasks = await localFile.readAsString();
       List jsonTasksList = json.decode(jsonTasks);
       for (var task in jsonTasksList) {
-        tasks.add(Task.fromMap(task));
+        tasks.add(Task.fromMapFile(task));
       }
-    } catch (error) {
-      print('The following error was thrown: $error');
-    }
+    } catch (error) {}
     return tasks;
+  }
+
+  @override
+  Future<Task?>? readDataById(int id) async {
+    if (id < 0) {
+      return null;
+    }
+    List<Task> tasks = await readData();
+    for (Task task in tasks) {
+      if (task.id == id) {
+        return task;
+      }
+    }
+    return null;
   }
 }

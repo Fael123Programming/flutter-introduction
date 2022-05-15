@@ -4,4 +4,6 @@ abstract class DataPersistenceEntity {
   void saveData(List<Task> tasks);
 
   Future<List<Task>> readData();
+
+  Future<Task?>? readDataById(int id);
 }
