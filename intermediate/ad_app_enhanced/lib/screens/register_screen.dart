@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:open_file/open_file.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import '../models/ad.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  File? image;
+  XFile? image;
 
   @override
   void initState() {
@@ -65,12 +66,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Column(
         children: [
           GestureDetector(
+            onLongPress: () {
+              if (image == null) {
+                return;
+              }
+              openFile(image!.path);
+            },
             onTap: () async {
               showModalBottomSheet<void>(
                 context: context,
                 builder: (BuildContext context) {
                   return Container(
-                    height: 200,
                     color: Colors.grey[300],
                     child: Center(
                       child: Column(
@@ -86,25 +92,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Material(
                             child: ListTile(
                               onTap: () async {
-                                var filePickerResult =
+                                final result =
                                     await FilePicker.platform.pickFiles(
                                   type: FileType.image,
                                 );
-                                String? filePath;
-                                if (filePickerResult != null) {
-                                  filePath =
-                                      filePickerResult.files[0].path.toString();
-                                  setState(
-                                    () => image = File(filePath!),
-                                  );
-                                  Navigator.pop(context);
+                                if (result == null) {
+                                  //No files were picked...
+                                  return;
                                 }
-                                print(
-                                    "*****************************************");
-                                print(filePath);
-                                print(filePickerResult);
-                                print(
-                                    "*****************************************");
+                                final file = result.files.first;
+                                setState(
+                                  () => image = XFile(file.path!),
+                                );
+                                Navigator.pop(context);
                               },
                               title: const Center(
                                 child: Text("Gallery"),
@@ -114,6 +114,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           Material(
                             child: ListTile(
+                              onTap: () async {
+                                final result = await ImagePicker()
+                                    .pickImage(source: ImageSource.camera);
+                                if (result == null) {
+                                  return;
+                                }
+                                setState(() {
+                                  image = result;
+                                });
+                                Navigator.pop(context);
+                              },
                               title: const Center(
                                 child: Text("Camera"),
                               ),
@@ -189,8 +200,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Icons.add_a_photo,
                       size: 40,
                     )
-                  : Image.asset(
-                      image!.path,
+                  : Image.file(
+                      File(image!.path),
                     ),
             ),
           ),
@@ -432,5 +443,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ],
       ),
     );
+  }
+
+  void openFile(String filePath) {
+    OpenFile.open(filePath);
   }
 }

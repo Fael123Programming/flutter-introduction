@@ -1,9 +1,9 @@
-import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class Ad {
   late String title, description;
   late double price;
-  late File? image;
+  late XFile? image;
 
   Ad(
       {required this.title,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/ad.dart';
 import 'register_screen.dart';
+import 'dart:io';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -128,11 +129,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     isThreeLine: true,
                     dense: true,
                     leading: ad.image != null
-                        ? CircleAvatar(
-                            child: ClipOval(
-                              child: Image.file(ad.image!),
+                        ? Container(
+                            child: Image.file(
+                              File(ad.image!.path),
                             ),
-                            backgroundColor: Colors.grey[300],
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
                           )
                         : Container(
                             child: const Icon(Icons.add_a_photo),
@@ -272,8 +273,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void openWhatsApp(String msg) async {
-    final url = Uri.parse("https://wa.me/?text=$msg");
-    if (!await launchUrl(url)) {
+    final url = Platform.isAndroid
+        ? "whatsapp://send?text=$msg"
+        : "https://wa.me/?text=$msg";
+    if (!await launchUrl(Uri.parse(url))) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Could not open WhatsApp"),
