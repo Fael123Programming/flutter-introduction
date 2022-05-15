@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.dart';
+import 'package:todo_list/persistence/data_persistence_entity.dart';
+import 'package:todo_list/persistence/file_persistence.dart';
 import 'package:todo_list/screens/register_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,7 +12,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Task> tasks = [];
+  late List<Task> tasks = [];
+  DataPersistenceEntity dataPersistenceEntity = FilePersistence();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    dataPersistenceEntity.readData().then((data) {
+      setState(() => tasks = data);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   confirmDismiss: (direction) async {
+                    bool deleteTask = false;
                     if (direction == DismissDirection.startToEnd) {
                       //Scrolling from left to right, edit the task.
                       Task editedTask = await Navigator.push(
@@ -73,7 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           tasks.insert(position, editedTask);
                         },
                       );
-                      return false; //Do not delete.
                     } else {
                       //Scrolling from right to left, deletes the task.
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -85,8 +96,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(
                         () => tasks.removeAt(position),
                       );
-                      return true; //Delete it.
+                      deleteTask = true;
                     }
+                    setState(() => dataPersistenceEntity.saveData(tasks));
+                    return deleteTask;
                   },
                   child: ListTile(
                     title: Text(
@@ -99,7 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     onTap: () {
-                      setState(() => task.done = !task.done);
+                      setState(() {
+                        task.done = !task.done;
+                        dataPersistenceEntity.saveData(tasks);
+                      });
                     },
                     onLongPress: () async {
                       Task editedTask = await Navigator.push(
@@ -114,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(() {
                         tasks.removeAt(position);
                         tasks.insert(position, editedTask);
+                        dataPersistenceEntity.saveData(tasks);
                       });
                     },
                     trailing: task.done
@@ -139,11 +156,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context) => const RegisterScreen(),
               ),
             );
-            setState(() => tasks.add(task));
+            setState(() {
+              tasks.add(task);
+              dataPersistenceEntity.saveData(tasks);
+            });
           } catch (error) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text("Operation canceled"),
+                content: Text("Canceled"),
                 duration: Duration(seconds: 1),
               ),
             );
