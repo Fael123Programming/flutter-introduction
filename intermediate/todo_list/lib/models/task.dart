@@ -25,6 +25,14 @@ class Task {
     };
   }
 
+  static List<Map> convertIntoMaps(List<Task> tasks) {
+    List<Map> mapsList = [];
+    for (Task t in tasks) {
+      mapsList.add(t.toMap());
+    }
+    return mapsList;
+  }
+
   @override
   String toString() {
     return "Task(id: $id, text: $text, done: $done)";

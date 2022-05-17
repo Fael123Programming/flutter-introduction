@@ -115,9 +115,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
-                            Task task = Task(textController.text);
-                            Navigator.pop(context, task);
                             if (widget.editing) {
+                              widget.task!.text = textController.text;
+                              Navigator.pop(context, widget.task);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text("Edited"),
@@ -125,6 +125,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               );
                             } else {
+                              Task newTask = Task(textController.text);
+                              Navigator.pop(context, newTask);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text("Registered"),
@@ -134,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             }
                           }
                         },
-                        child: Text(widget.task == null ? "Register" : "Edit"),
+                        child: Text(widget.editing ? "Edit" : "Register"),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
                         ),

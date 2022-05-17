@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.dart';
 import 'package:todo_list/persistence/data_persistence_entity.dart';
+// import 'package:todo_list/persistence/database_persistence.dart';
 import 'package:todo_list/persistence/file_persistence.dart';
 import 'package:todo_list/screens/register_screen.dart';
 
@@ -12,13 +13,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  //A list to keep track of all tasks user has created.
   late List<Task> tasks = [];
+  //The way the tasks are being saved in the disc.
   DataPersistenceEntity dataPersistenceEntity = FilePersistence();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    dataPersistenceEntity.readData().then((data) {
+    dataPersistenceEntity.readAll().then((data) {
       setState(() => tasks = data);
     });
   }
@@ -43,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : ListView.separated(
               itemCount: tasks.length,
               itemBuilder: (context, position) {
+                //The current task user is handling.
                 Task task = tasks[position];
                 return Dismissible(
                   key: UniqueKey(),
@@ -70,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     bool deleteTask = false;
                     if (direction == DismissDirection.startToEnd) {
                       //Scrolling from left to right, edit the task.
+                      //The edited task after user have edited it.
                       Task editedTask = await Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -85,6 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           tasks.insert(position, editedTask);
                         },
                       );
+                      //Updating the task in the disc.
+                      dataPersistenceEntity.update(editedTask);
                     } else {
                       //Scrolling from right to left, deletes the task.
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -93,12 +100,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           duration: Duration(seconds: 1),
                         ),
                       );
+                      //Deleting the task in the disc using its id.
+                      dataPersistenceEntity.delete(tasks[position].id!);
                       setState(
                         () => tasks.removeAt(position),
                       );
                       deleteTask = true;
                     }
-                    setState(() => dataPersistenceEntity.saveData(tasks));
                     return deleteTask;
                   },
                   child: ListTile(
@@ -114,8 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       setState(() {
                         task.done = !task.done;
-                        dataPersistenceEntity.saveData(tasks);
                       });
+                      //Updating the task in the disc.
+                      dataPersistenceEntity.update(task);
                     },
                     onLongPress: () async {
                       Task editedTask = await Navigator.push(
@@ -127,10 +136,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       );
+                      dataPersistenceEntity.update(editedTask);
                       setState(() {
                         tasks.removeAt(position);
                         tasks.insert(position, editedTask);
-                        dataPersistenceEntity.saveData(tasks);
                       });
                     },
                     trailing: task.done
@@ -150,15 +159,15 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async /*Asynchronous call!*/ {
           try {
-            Task task = await Navigator.push(
+            Task newTask = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const RegisterScreen(),
               ),
             );
+            dataPersistenceEntity.create(newTask);
             setState(() {
-              tasks.add(task);
-              dataPersistenceEntity.saveData(tasks);
+              tasks.add(newTask);
             });
           } catch (error) {
             ScaffoldMessenger.of(context).showSnackBar(
