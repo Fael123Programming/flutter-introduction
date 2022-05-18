@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.dart';
-import 'package:todo_list/persistence/data_persistence_entity.dart';
 // import 'package:todo_list/persistence/database_persistence.dart';
 import 'package:todo_list/persistence/file_persistence.dart';
 import 'package:todo_list/screens/register_screen.dart';
@@ -16,13 +15,17 @@ class _HomeScreenState extends State<HomeScreen> {
   //A list to keep track of all tasks user has created.
   late List<Task> tasks = [];
   //The way the tasks are being saved in the disc.
-  DataPersistenceEntity dataPersistenceEntity = FilePersistence();
+  FilePersistence filePersistence = FilePersistence();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    dataPersistenceEntity.readAll().then((data) {
-      setState(() => tasks = data);
+    filePersistence.read().then((readTasks) {
+      setState(() {
+        if (readTasks != null) {
+          tasks = readTasks;
+        }
+      });
     });
   }
 
@@ -88,10 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         () {
                           tasks.removeAt(position);
                           tasks.insert(position, editedTask);
+                          filePersistence.save(tasks);
                         },
                       );
-                      //Updating the task in the disc.
-                      dataPersistenceEntity.update(editedTask);
                     } else {
                       //Scrolling from right to left, deletes the task.
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -100,11 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           duration: Duration(seconds: 1),
                         ),
                       );
-                      //Deleting the task in the disc using its id.
-                      dataPersistenceEntity.delete(tasks[position].id!);
-                      setState(
-                        () => tasks.removeAt(position),
-                      );
+                      setState(() {
+                        //Deleting the task in the disc using its id.
+                        tasks.removeAt(position);
+                        filePersistence.save(tasks);
+                      });
                       deleteTask = true;
                     }
                     return deleteTask;
@@ -122,9 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       setState(() {
                         task.done = !task.done;
+                        filePersistence.save(tasks);
                       });
-                      //Updating the task in the disc.
-                      dataPersistenceEntity.update(task);
                     },
                     onLongPress: () async {
                       Task editedTask = await Navigator.push(
@@ -136,10 +137,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       );
-                      dataPersistenceEntity.update(editedTask);
                       setState(() {
                         tasks.removeAt(position);
                         tasks.insert(position, editedTask);
+                        filePersistence.save(tasks);
                       });
                     },
                     trailing: task.done
@@ -157,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
               separatorBuilder: (context, position) => const Divider(),
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async /*Asynchronous call!*/ {
+        onPressed: () async {
           try {
             Task newTask = await Navigator.push(
               context,
@@ -165,9 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context) => const RegisterScreen(),
               ),
             );
-            dataPersistenceEntity.create(newTask);
             setState(() {
               tasks.add(newTask);
+              filePersistence.save(tasks);
             });
           } catch (error) {
             ScaffoldMessenger.of(context).showSnackBar(

@@ -1,7 +1,7 @@
 import 'package:todo_list/models/task.dart';
 
 abstract class DataPersistenceEntity {
-  void create(Task task);
+  Future create(Task task);
 
   Future<List<Task>> readAll();
 

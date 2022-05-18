@@ -19,7 +19,7 @@ class DatabasePersistence extends DataPersistenceEntity {
   }
 
   @override
-  void create(Task task) async {
+  Future create(Task task) async {
     Database? db = await DatabaseHelper().db;
     if (db == null) {
       return;

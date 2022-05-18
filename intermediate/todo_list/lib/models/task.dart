@@ -2,8 +2,9 @@ class Task {
   int? id;
   late String text;
   bool done = false;
+  static int nextTaskId = 0;
 
-  Task(this.text);
+  Task(this.text, {this.id});
 
   Task.fromMapDb(Map task) {
     id = task['id'];
