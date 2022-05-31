@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.dart';
-// import 'package:todo_list/persistence/database_persistence.dart';
-import 'package:todo_list/persistence/file_persistence.dart';
 import 'package:todo_list/screens/register_screen.dart';
+
+import '../persistence/data_persistence_entity.dart';
+import '../persistence/database_persistence.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,16 +16,14 @@ class _HomeScreenState extends State<HomeScreen> {
   //A list to keep track of all tasks user has created.
   late List<Task> tasks = [];
   //The way the tasks are being saved in the disc.
-  FilePersistence filePersistence = FilePersistence();
+  DataPersistenceEntity databasePersistence = DatabasePersistence();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    filePersistence.read().then((readTasks) {
+    databasePersistence.readAll().then((readTasks) {
       setState(() {
-        if (readTasks != null) {
           tasks = readTasks;
-        }
       });
     });
   }
@@ -91,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         () {
                           tasks.removeAt(position);
                           tasks.insert(position, editedTask);
-                          filePersistence.save(tasks);
+                          databasePersistence.update(editedTask);
                         },
                       );
                     } else {
@@ -105,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(() {
                         //Deleting the task in the disc using its id.
                         tasks.removeAt(position);
-                        filePersistence.save(tasks);
+                        databasePersistence.delete(task.id!);
                       });
                       deleteTask = true;
                     }
@@ -124,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       setState(() {
                         task.done = !task.done;
-                        filePersistence.save(tasks);
+                        databasePersistence.update(task);
                       });
                     },
                     onLongPress: () async {
@@ -140,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(() {
                         tasks.removeAt(position);
                         tasks.insert(position, editedTask);
-                        filePersistence.save(tasks);
+                        databasePersistence.update(editedTask);
                       });
                     },
                     trailing: task.done
@@ -168,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
             setState(() {
               tasks.add(newTask);
-              filePersistence.save(tasks);
+              databasePersistence.create(newTask);
             });
           } catch (error) {
             ScaffoldMessenger.of(context).showSnackBar(

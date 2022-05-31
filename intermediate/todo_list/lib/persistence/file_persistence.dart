@@ -26,7 +26,7 @@ class FilePersistence {
     List<Task> tasks = [];
     final localFile = await FilePersistence._getLocalFile();
     String jsonTasks = await localFile.readAsString();
-    List<Map> mapTasks = json.decode(jsonTasks);
+    List mapTasks = json.decode(jsonTasks);
     for (Map mapTask in mapTasks) {
       tasks.add(Task.fromMap(mapTask));
     }
