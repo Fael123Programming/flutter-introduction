@@ -5,17 +5,18 @@ Post postFromJson(String str) => Post.fromJson(json.decode(str));
 String postToJson(Post data) => json.encode(data.toJson());
 
 class Post {
-    Post({
-        this.userId,
-        this.id,
-        this.title,
-        this.body,
-    });
-
     int userId;
     int id;
     String title;
     String body;
+    
+    Post({
+        required this.userId,
+        required this.id,
+        required this.title,
+        required this.body,
+    });
+
 
     factory Post.fromJson(Map<String, dynamic> json) => Post(
         userId: json["userId"],
