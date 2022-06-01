@@ -8,6 +8,7 @@ void main() {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.deepPurpleAccent,
+        visualDensity: VisualDensity.adaptivePlatformDensity
       ),
       initialRoute: "/",
       routes: {

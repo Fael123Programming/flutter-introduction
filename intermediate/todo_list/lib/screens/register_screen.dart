@@ -29,7 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Register Task"),
+        title: Text("${widget.editing ? 'Edit' : 'Register'} Task"),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
       ),

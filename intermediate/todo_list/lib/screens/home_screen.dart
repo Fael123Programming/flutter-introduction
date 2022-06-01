@@ -13,19 +13,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //A list to keep track of all tasks user has created.
-  late List<Task> tasks = [];
+  //A list to keep track of all tasks the user has created.
+  late Future<List<Task>> tasks;
   //The way the tasks are being saved in the disc.
-  DataPersistenceEntity databasePersistence = DatabasePersistence();
+  final DataPersistenceEntity databasePersistence = DatabasePersistence();
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    databasePersistence.readAll().then((readTasks) {
-      setState(() {
-          tasks = readTasks;
-      });
-    });
+  void initState() {
+    super.initState();
+    tasks = databasePersistence.readAll();
   }
 
   @override
@@ -36,20 +32,24 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: tasks.isEmpty
-          ? const Center(
-              child: Text(
-                "No tasks yet",
-                style: TextStyle(
-                  fontSize: 40,
+      body: FutureBuilder(
+        future: databasePersistence.readAll(),
+        builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+          if (snapshot.hasData) {
+            List tasksFromSnapshot = snapshot.data!;
+            if (tasksFromSnapshot.isEmpty) {
+              return const Center(
+                child: Text(
+                  "No tasks yet",
+                  style: TextStyle(fontSize: 40),
                 ),
-              ),
-            )
-          : ListView.separated(
-              itemCount: tasks.length,
+              );
+            }
+            return ListView.separated(
+              itemCount: tasksFromSnapshot.length,
               itemBuilder: (context, position) {
                 //The current task user is handling.
-                Task task = tasks[position];
+                Task task = tasksFromSnapshot[position];
                 return Dismissible(
                   key: UniqueKey(),
                   background: Container(
@@ -88,8 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                       setState(
                         () {
-                          tasks.removeAt(position);
-                          tasks.insert(position, editedTask);
+                          tasksFromSnapshot.removeAt(position);
+                          tasksFromSnapshot.insert(position, editedTask);
                           databasePersistence.update(editedTask);
                         },
                       );
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                       setState(() {
                         //Deleting the task in the disc using its id.
-                        tasks.removeAt(position);
+                        tasksFromSnapshot.removeAt(position);
                         databasePersistence.delete(task.id!);
                       });
                       deleteTask = true;
@@ -137,8 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       );
                       setState(() {
-                        tasks.removeAt(position);
-                        tasks.insert(position, editedTask);
+                        tasksFromSnapshot.removeAt(position);
+                        tasksFromSnapshot.insert(position, editedTask);
                         databasePersistence.update(editedTask);
                       });
                     },
@@ -155,7 +155,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
               separatorBuilder: (context, position) => const Divider(),
-            ),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           try {
@@ -166,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
             setState(() {
-              tasks.add(newTask);
+              tasks.then((t) => t.add(newTask));
               databasePersistence.create(newTask);
             });
           } catch (error) {
