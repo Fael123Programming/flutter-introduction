@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:ifeirinha_rafael/custom_icons.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Container(
-        child: null,
+    return GestureDetector(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        body: const Center(
+          child: Icon(
+            CustomIcons.ifeirinhaSplashScreen,
+          ),
+        ),
       ),
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            if ()
+          }),
+        );
+      },
     );
   }
 }
