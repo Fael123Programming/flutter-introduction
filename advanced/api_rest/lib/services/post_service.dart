@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class PostService {
   
   ///Get all posts of the user that has the corresponding userId.
-  ///If userIs is null it fetchs all posts from all users.
+  ///If userId is null it fetchs all posts from all users.
   Future<List<Post>> get(int? userId) async {
     String url = 'https://jsonplaceholder.typicode.com/posts';
     if (userId != null) {

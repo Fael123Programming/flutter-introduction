@@ -26,24 +26,27 @@ class User {
       required this.website,
       required this.company});
 
-  factory User.fromMap(Map<String, dynamic> map) => User(
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
       id: map['id'],
       name: map['name'],
       username: map['username'],
       email: map['email'],
-      address: addressFromJson(map['address']),
+      address: Address.fromMap(map['address']),
       phone: map['phone'],
       website: map['website'],
-      company: companyFromJson(map['company']));
+      company: Company.fromMap(map['company']),
+    );
+  }
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "name": name,
-    "username": username,
-    "email": email,
-    "address": address.toMap(),
-    "phone": phone,
-    "website": website,
-    "company": company.toMap()
-  };
+        "id": id,
+        "name": name,
+        "username": username,
+        "email": email,
+        "address": address!.toMap(),
+        "phone": phone,
+        "website": website,
+        "company": company!.toMap()
+      };
 }

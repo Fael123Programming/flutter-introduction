@@ -25,7 +25,7 @@ class Address {
         suite: map["suite"],
         city: map["city"],
         zipcode: map["zipcode"],
-        geo: geoFromJson(map['geo'])
+        geo: Geo.fromMap(map['geo'])
       );
 
   Map<String, dynamic> toMap() => {
