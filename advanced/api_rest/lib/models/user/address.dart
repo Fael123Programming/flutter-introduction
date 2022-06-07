@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:api_rest/models/user/geo.dart';
 
-Address addressFromJson(String str) => Address.fromJson(json.decode(str));
+Address addressFromJson(String str) => Address.fromMap(json.decode(str));
 
-String addressToJson(Address data) => json.encode(data.toJson());
+String addressToJson(Address data) => json.encode(data.toMap());
 
 class Address {
   String street;
@@ -20,19 +20,19 @@ class Address {
     required this.geo
   });
 
-  factory Address.fromJson(Map<String, dynamic> json) => Address(
-        street: json["street"],
-        suite: json["suite"],
-        city: json["city"],
-        zipcode: json["zipcode"],
-        geo: geoFromJson(json['geo'])
+  factory Address.fromMap(Map<String, dynamic> map) => Address(
+        street: map["street"],
+        suite: map["suite"],
+        city: map["city"],
+        zipcode: map["zipcode"],
+        geo: geoFromJson(map['geo'])
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "street": street,
         "suite": suite,
         "city": city,
         "zipcode": zipcode,
-        "geo": geo.toJson()
+        "geo": geo.toMap()
       };
 }

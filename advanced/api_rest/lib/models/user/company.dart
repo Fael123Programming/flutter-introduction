@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-Company companyFromJson(String str) => Company.fromJson(json.decode(str));
+Company companyFromJson(String str) => Company.fromMap(json.decode(str));
 
-String companyToJson(Company data) => json.encode(data.toJson());
+String companyToJson(Company company) => json.encode(company.toMap());
 
 class Company {
     String name;
@@ -16,13 +16,13 @@ class Company {
     });
 
 
-    factory Company.fromJson(Map<String, dynamic> json) => Company(
-        name: json["name"],
-        catchPhrase: json["catchPhrase"],
-        bs: json["bs"],
+    factory Company.fromMap(Map<String, dynamic> map) => Company(
+        name: map["name"],
+        catchPhrase: map["catchPhrase"],
+        bs: map["bs"],
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "name": name,
         "catchPhrase": catchPhrase,
         "bs": bs,

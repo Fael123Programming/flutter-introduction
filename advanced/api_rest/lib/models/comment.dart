@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-Comment commentFromJson(String str) => Comment.fromJson(json.decode(str));
+Comment commentFromJson(String str) => Comment.fromMap(json.decode(str));
 
-String commentToJson(Comment data) => json.encode(data.toJson());
+String commentToJson(Comment comment) => json.encode(comment.toMap());
 
 class Comment {
     int postId;
@@ -20,15 +20,15 @@ class Comment {
     });
 
 
-    factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-        postId: json["postId"],
-        id: json["id"],
-        name: json["name"],
-        email: json["email"],
-        body: json["body"],
+    factory Comment.fromMap(Map<String, dynamic> map) => Comment(
+        postId: map["postId"],
+        id: map["id"],
+        name: map["name"],
+        email: map["email"],
+        body: map["body"],
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "postId": postId,
         "id": id,
         "name": name,

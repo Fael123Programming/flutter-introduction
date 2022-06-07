@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-Geo geoFromJson(String str) => Geo.fromJson(json.decode(str));
+Geo geoFromJson(String str) => Geo.fromMap(json.decode(str));
 
-String geoToJson(Geo data) => json.encode(data.toJson());
+String geoToJson(Geo geo) => json.encode(geo.toMap());
 
 class Geo {
     String lat;
@@ -13,12 +13,12 @@ class Geo {
         required this.lng,
     });
 
-    factory Geo.fromJson(Map<String, dynamic> json) => Geo(
-        lat: json["lat"],
-        lng: json["lng"],
+    factory Geo.fromMap(Map<String, dynamic> map) => Geo(
+        lat: map["lat"],
+        lng: map["lng"],
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "lat": lat,
         "lng": lng,
     };

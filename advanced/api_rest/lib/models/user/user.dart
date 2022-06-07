@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:api_rest/models/user/address.dart';
 import 'package:api_rest/models/user/company.dart';
 
-User userFromJson(String str) => User.fromJson(json.decode(str));
+User userFromJson(String str) => User.fromMap(json.decode(str));
 
-String userToJson(User data) => json.encode(data.toJson());
+String userToJson(User user) => json.encode(user.toMap());
 
 class User {
   int id;
@@ -26,24 +26,24 @@ class User {
       required this.website,
       required this.company});
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-      id: json['id'],
-      name: json['name'],
-      username: json['username'],
-      email: json['email'],
-      address: addressFromJson(json['address']),
-      phone: json['phone'],
-      website: json['website'],
-      company: companyFromJson(json['company']));
+  factory User.fromMap(Map<String, dynamic> map) => User(
+      id: map['id'],
+      name: map['name'],
+      username: map['username'],
+      email: map['email'],
+      address: addressFromJson(map['address']),
+      phone: map['phone'],
+      website: map['website'],
+      company: companyFromJson(map['company']));
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
     "id": id,
     "name": name,
     "username": username,
     "email": email,
-    "address": address.toJson(),
+    "address": address.toMap(),
     "phone": phone,
     "website": website,
-    "company": company.toJson()
+    "company": company.toMap()
   };
 }

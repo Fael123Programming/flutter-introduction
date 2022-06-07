@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-Post postFromJson(String str) => Post.fromJson(json.decode(str));
+Post postFromJson(String str) => Post.fromMap(json.decode(str));
 
-String postToJson(Post data) => json.encode(data.toJson());
+String postToJson(Post data) => json.encode(data.toMap());
 
 class Post {
     int userId;
@@ -18,14 +18,14 @@ class Post {
     });
 
 
-    factory Post.fromJson(Map<String, dynamic> json) => Post(
-        userId: json["userId"],
-        id: json["id"],
-        title: json["title"],
-        body: json["body"],
+    factory Post.fromMap(Map<String, dynamic> map) => Post(
+        userId: map["userId"],
+        id: map["id"],
+        title: map["title"],
+        body: map["body"],
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "userId": userId,
         "id": id,
         "title": title,
