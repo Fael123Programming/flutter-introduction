@@ -1,7 +1,9 @@
+import 'package:api_rest/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:api_rest/helper/sign_in_helper.dart';
 import 'package:api_rest/screens/home_screen.dart';
 import 'package:api_rest/models/user/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -21,10 +23,17 @@ class _SignInScreenState extends State<SignInScreen> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
     if (await signInHelper.isUserSignedIn()) {
+      final sharedPreferences = await SharedPreferences.getInstance();
+      final userService = UserService();
+      User? user = await userService.getUserByUsername(
+        sharedPreferences.getString('username')!,
+      );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
+          builder: (context) => HomeScreen(
+            userSignedIn: user,
+          ),
         ),
       );
     }
@@ -92,7 +101,9 @@ class _SignInScreenState extends State<SignInScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
+                            builder: (context) => HomeScreen(
+                              userSignedIn: user,
+                            ),
                           ),
                         );
                       } else {

@@ -44,9 +44,9 @@ class User {
         "name": name,
         "username": username,
         "email": email,
-        "address": address!.toMap(),
+        "address": address.toMap(),
         "phone": phone,
         "website": website,
-        "company": company!.toMap()
+        "company": company.toMap()
       };
 }

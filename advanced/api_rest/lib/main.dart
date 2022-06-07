@@ -4,13 +4,9 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(
-    MaterialApp(
+    const MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/sign_in',
-      routes: {
-        '/sign_in': (context) => const SignInScreen(),
-        '/home': (context) => const HomeScreen(),
-      },
+      home: SignInScreen(),
     ),
   );
 }

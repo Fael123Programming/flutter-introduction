@@ -12,21 +12,19 @@ class Address {
   String zipcode;
   Geo geo;
 
-  Address({
-    required this.street,
-    required this.suite,
-    required this.city,
-    required this.zipcode,
-    required this.geo
-  });
+  Address(
+      {required this.street,
+      required this.suite,
+      required this.city,
+      required this.zipcode,
+      required this.geo});
 
   factory Address.fromMap(Map<String, dynamic> map) => Address(
-        street: map["street"],
-        suite: map["suite"],
-        city: map["city"],
-        zipcode: map["zipcode"],
-        geo: Geo.fromMap(map['geo'])
-      );
+      street: map["street"],
+      suite: map["suite"],
+      city: map["city"],
+      zipcode: map["zipcode"],
+      geo: Geo.fromMap(map['geo']));
 
   Map<String, dynamic> toMap() => {
         "street": street,
@@ -35,4 +33,8 @@ class Address {
         "zipcode": zipcode,
         "geo": geo.toMap()
       };
+
+  String toUniqueString() {
+    return '$street, $suite, $city, $zipcode, ${geo.toUniqueString()}';
+  }
 }

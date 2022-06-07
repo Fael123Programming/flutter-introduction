@@ -4,9 +4,12 @@ import 'package:api_rest/helper/post_helper.dart';
 import 'package:api_rest/helper/sign_in_helper.dart';
 import 'package:api_rest/screens/sign_in_screen.dart';
 import 'package:api_rest/screens/comment_screen.dart';
+import 'package:api_rest/models/user/user.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final User? userSignedIn;
+
+  const HomeScreen({this.userSignedIn, Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -32,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.exit_to_app),
+            tooltip: 'Sign Out',
             onPressed: () async {
               final signInHelper = SignInHelper();
               await signInHelper.signOut();
@@ -82,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     isThreeLine: true,
                     trailing: const Icon(
                       Icons.chevron_right,
+                      semanticLabel: 'Comments',
                     ),
                   ),
                 );
@@ -93,6 +98,53 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
         },
+      ),
+      drawer: Drawer(
+        semanticLabel: 'Profile Info',
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                widget.userSignedIn!.username,
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontFamily: 'Arial',
+                ),
+              ),
+              accountEmail: Text(
+                widget.userSignedIn!.email,
+                style: const TextStyle(fontFamily: 'Arial'),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Name'),
+              subtitle: Text(widget.userSignedIn!.name),
+            ),
+            ListTile(
+              leading: const Icon(Icons.place),
+              title: const Text('Address'),
+              subtitle: Text(widget.userSignedIn!.address.toUniqueString()),
+              isThreeLine: true,
+            ),
+            ListTile(
+              leading: const Icon(Icons.phone),
+              title: const Text('Phone Number'),
+              subtitle: Text(widget.userSignedIn!.phone),
+            ),
+            ListTile(
+              leading: const Icon(Icons.web_sharp),
+              title: const Text('Website'),
+              subtitle: Text(widget.userSignedIn!.website),
+            ),
+            ListTile(
+              leading: const Icon(Icons.work),
+              title: const Text('Company'),
+              subtitle: Text(widget.userSignedIn!.company.name),
+            ),
+          ],
+        ),
       ),
     );
   }
