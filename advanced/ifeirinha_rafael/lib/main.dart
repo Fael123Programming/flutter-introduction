@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ifeirinha_rafael/screens/initialization/sign_in_screen.dart';
 import 'package:ifeirinha_rafael/screens/initialization/sign_up_screen.dart';
-import 'package:ifeirinha_rafael/screens/initialization/splash_screen.dart';
 
 void main() {
   runApp(
@@ -102,11 +101,10 @@ void main() {
           ),
         ),
       ),
-      initialRoute: "/",
+      initialRoute: "/sign_in",
       routes: {
-        "/": (context) => const SplashScreen(),
-        "/sign_in_screen": (context) => const SignInScreen(),
-        "/sign_up_screen": (context) => const SignUpScreen()
+        "/sign_in": (context) => const SignInScreen(),
+        "/sign_up": (context) => const SignUpScreen()
       },
     ),
   );

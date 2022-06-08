@@ -12,17 +12,18 @@ class SplashScreen extends StatelessWidget {
         body: const Center(
           child: Icon(
             CustomIcons.ifeirinhaSplashScreen,
+            size: 100,
           ),
         ),
       ),
-      onTap: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) {
-            if ()
-          }),
-        );
-      },
+      // onTap: () {
+      //   Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(builder: (context) {
+      //       if ()
+      //     }),
+      //   );
+      // },
     );
   }
 }
