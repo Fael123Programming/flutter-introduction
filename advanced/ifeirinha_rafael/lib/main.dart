@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifeirinha_rafael/screens/initialization/sign_in_screen.dart';
-import 'package:ifeirinha_rafael/screens/initialization/sign_up_screen.dart';
+import 'package:ifeirinha_rafael/screens/sign_in_screen.dart';
 
 void main() {
   runApp(
@@ -101,11 +100,7 @@ void main() {
           ),
         ),
       ),
-      initialRoute: "/sign_in",
-      routes: {
-        "/sign_in": (context) => const SignInScreen(),
-        "/sign_up": (context) => const SignUpScreen()
-      },
+      home: const SignInScreen(),
     ),
   );
 //Theme.of(context).colorScheme
