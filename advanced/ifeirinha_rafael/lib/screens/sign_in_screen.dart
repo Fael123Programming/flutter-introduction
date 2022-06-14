@@ -1,9 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ifeirinha_rafael/screen_sizer/screen_sizer.dart';
+import 'package:ifeirinha_rafael/screen_sizer/screen_percentage.dart';
 import 'package:ifeirinha_rafael/screens/change_password_screen.dart';
 import 'package:ifeirinha_rafael/validation/sign_in_validator.dart';
 import 'package:ifeirinha_rafael/screens/sign_up_screen.dart';
+
+//My phone's dimensions:
+//width: 411.42857142857144 (411.43)
+//height: 866.2857142857143 (866.3)
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -21,6 +27,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenSizer screenSizer = ScreenSizer(context);
+    screenSizer.adjustHeightIfDeviceIsiOS();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -29,7 +37,11 @@ class _SignInScreenState extends State<SignInScreen> {
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Center(
             child: Container(
-              margin: const EdgeInsets.only(top: 100),
+              margin: EdgeInsets.only(
+                top: screenSizer.convertToDeviceScreenHeight(
+                  screenPercentage: ScreenPercentage.marginTopBemVindoIfeirinha.,
+                ),
+              ),
               child: Column(
                 children: [
                   Text(
@@ -47,8 +59,11 @@ class _SignInScreenState extends State<SignInScreen> {
                       fontSize: 48,
                     ),
                   ),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: screenSizer.convertToDeviceScreenHeight(
+                      screenPercentage:
+                          ScreenSizer.sizedBoxAfterBemVindoIfeirinha,
+                    ),
                   ),
                   Text(
                     'Login',
@@ -65,13 +80,22 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: Colors.grey,
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: screenSizer.convertToDeviceScreenHeight(
+                      screenPercentage:
+                          ScreenSizer.sizedBoxAfterLoginEntreEDeGraca,
+                    ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 40,
+                    padding: EdgeInsets.symmetric(
+                      vertical: screenSizer.convertToDeviceScreenHeight(
+                        screenPercentage:
+                            ScreenSizer.formContainerVerticalPadding,
+                      ),
+                      horizontal: screenSizer.convertToDeviceScreenWidth(
+                        screenPercentage:
+                            ScreenSizer.formContainerHorizontalPadding,
+                      ),
                     ),
                     child: Form(
                       key: formKey,
@@ -92,7 +116,12 @@ class _SignInScreenState extends State<SignInScreen> {
                             validator: (email) =>
                                 SignInValidator.validateEmail(email),
                           ),
-                          const SizedBox(height: 15),
+                          SizedBox(
+                            height: screenSizer.convertToDeviceScreenHeight(
+                              screenPercentage:
+                                  ScreenSizer.sizedBoxAfterEmailLoginInput,
+                            ),
+                          ),
                           TextFormField(
                             cursorColor: Colors.black,
                             obscureText: obscurePassword,
@@ -138,7 +167,12 @@ class _SignInScreenState extends State<SignInScreen> {
                       );
                     },
                     child: Container(
-                      margin: const EdgeInsets.only(right: 40),
+                      margin: EdgeInsets.only(
+                        right: screenSizer.convertToDeviceScreenWidth(
+                          screenPercentage:
+                              ScreenSizer.marginRightContainerEsqueciMinhaSenha,
+                        ),
+                      ),
                       alignment: Alignment.topRight,
                       child: const Text(
                         'Esqueci minha senha',
@@ -152,9 +186,17 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 30),
-                    width: 209,
-                    height: 60,
+                    margin: EdgeInsets.only(
+                      top: screenSizer.convertToDeviceScreenHeight(
+                          screenPercentage:
+                              ScreenSizer.marginTopEntrarButtonContainer),
+                    ),
+                    width: screenSizer.convertToDeviceScreenWidth(
+                      screenPercentage: ScreenSizer.widthEntrarButtonContainer,
+                    ),
+                    height: screenSizer.convertToDeviceScreenHeight(
+                      screenPercentage: ScreenSizer.heightEntrarButtonContainer,
+                    ),
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
@@ -163,7 +205,12 @@ class _SignInScreenState extends State<SignInScreen> {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
+                            borderRadius: BorderRadius.circular(
+                              screenSizer.convertToDeviceScreenWidth(
+                                screenPercentage:
+                                    ScreenSizer.radiusEntrarButton,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -184,7 +231,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 190),
+                    margin: EdgeInsets.only(
+                      top: screenSizer.convertToDeviceScreenHeight(
+                        screenPercentage: ScreenSizer
+                            .marginTopContainerNaoTemUmaContaCadastreSe,
+                      ),
+                    ),
                     child: RichText(
                       text: TextSpan(
                         style: GoogleFonts.roboto(
