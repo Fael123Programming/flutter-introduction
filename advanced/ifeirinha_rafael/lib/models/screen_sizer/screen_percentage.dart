@@ -9,6 +9,7 @@ enum ScreenPercentage {
   smoothMarginRight(0.097), 
   bigButtonMarginTop(0.035), 
   bigButtonWidth(0.51), 
+  bigButtonWidthSpecial(0.6),
   bigButtonHeight(0.069), 
   bigButtonRadius(0.24), 
   marginTopAFifthScreen(0.2), 

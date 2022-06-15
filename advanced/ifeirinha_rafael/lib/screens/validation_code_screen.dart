@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ifeirinha_rafael/validation/validator.dart';
-import 'package:ifeirinha_rafael/models/screen_sizer/screen_sizer.dart';
 import 'package:ifeirinha_rafael/models/screen_sizer/screen_percentage.dart';
-import 'package:ifeirinha_rafael/screens/validation_code_screen.dart';
+import 'package:ifeirinha_rafael/models/screen_sizer/screen_sizer.dart';
 
-class ChangePasswordScreen extends StatefulWidget {
-  final String headerTitle;
-
-  const ChangePasswordScreen(this.headerTitle, {Key? key}) : super(key: key);
+class ValidationCodeScreen extends StatefulWidget {
+  const ValidationCodeScreen({Key? key}) : super(key: key);
 
   @override
-  _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
+  _ValidationCodeScreenState createState() => _ValidationCodeScreenState();
 }
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-
+class _ValidationCodeScreenState extends State<ValidationCodeScreen> {
   @override
   Widget build(BuildContext context) {
     ScreenSizer screenSizer = ScreenSizer(context);
@@ -47,7 +40,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                 ),
                 child: Text(
-                  widget.headerTitle,
+                  'Código de Validação',
                   style: GoogleFonts.roboto(
                     fontWeight: FontWeight.w400,
                     fontSize: 30,
@@ -61,7 +54,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                 ),
                 child: Text(
-                  'Digite o seu e-mail para receber o código de validação',
+                  'Digite o código de 4 dígitos que foi enviado para seu e-mail',
                   style: GoogleFonts.openSans(
                     fontWeight: FontWeight.w400,
                     fontSize: 11,
@@ -75,33 +68,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     screenPercentage: ScreenPercentage.marginTopFormContainer,
                   ),
                 ),
-                padding: EdgeInsets.symmetric(
-                  vertical: screenSizer.convertToDeviceScreenHeight(
-                    screenPercentage:
-                        ScreenPercentage.formContainerVerticalPadding,
-                  ),
-                  horizontal: screenSizer.convertToDeviceScreenWidth(
-                    screenPercentage:
-                        ScreenPercentage.formContainerHorizontalPadding,
-                  ),
-                ),
-                child: Form(
-                  key: formKey,
-                  autovalidateMode: AutovalidateMode.always,
-                  child: TextFormField(
-                    cursorColor: Colors.black,
-                    autofocus: true,
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      focusedBorder: OutlineInputBorder(),
-                      border: OutlineInputBorder(),
-                      hintText: 'E-mail',
-                      hintStyle: TextStyle(color: Colors.grey),
-                      isDense: true,
-                    ),
-                    validator: (email) => Validator.validateEmail(email),
-                  ),
-                ),
+                child: Row(),
               ),
               Container(
                 margin: EdgeInsets.only(
@@ -130,6 +97,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       ),
                     ),
                   ),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Continuar'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  },
                   child: Text(
                     'Continuar',
                     style: GoogleFonts.roboto(
@@ -137,33 +112,50 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       fontSize: 20,
                     ),
                   ),
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      String email = emailController.text;
-                      if (emailExists(email)) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ValidationCodeScreen(),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  top: screenSizer.convertToDeviceScreenHeight(
+                    screenPercentage: ScreenPercentage.bigButtonMarginTop,
+                  ),
+                ),
+                height: screenSizer.convertToDeviceScreenHeight(
+                  screenPercentage: ScreenPercentage.bigButtonHeight,
+                ),
+                width: screenSizer.convertToDeviceScreenWidth(
+                  screenPercentage: ScreenPercentage.bigButtonWidthSpecial,
+                ),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Theme.of(context).colorScheme.primary,
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          screenSizer.convertToDeviceScreenWidth(
+                            screenPercentage: ScreenPercentage.bigButtonRadius,
                           ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('E-mail não encontrado'),
-                            duration: Duration(seconds: 1),
-                          ),
-                        );
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('E-mail inválido'),
-                          duration: Duration(seconds: 1),
                         ),
-                      );
-                    }
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Reenviar código'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
                   },
+                  child: Text(
+                    'Reenviar Código',
+                    style: GoogleFonts.roboto(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -171,10 +163,5 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
       ),
     );
-  }
-
-  bool emailExists(String email) {
-    //Check user whether email exists and is linked to an user.
-    return email == 'ifeirinha.nao.responda@gmail.com';
   }
 }

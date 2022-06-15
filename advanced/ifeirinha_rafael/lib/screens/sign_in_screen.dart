@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ifeirinha_rafael/screen_sizer/screen_sizer.dart';
-import 'package:ifeirinha_rafael/screen_sizer/screen_percentage.dart';
+import 'package:ifeirinha_rafael/models/screen_sizer/screen_sizer.dart';
+import 'package:ifeirinha_rafael/models/screen_sizer/screen_percentage.dart';
 import 'package:ifeirinha_rafael/screens/change_password_screen.dart';
 import 'package:ifeirinha_rafael/validation/validator.dart';
 import 'package:ifeirinha_rafael/screens/sign_up_screen.dart';
