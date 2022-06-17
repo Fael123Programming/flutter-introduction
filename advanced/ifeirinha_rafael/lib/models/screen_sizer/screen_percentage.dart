@@ -1,6 +1,7 @@
 enum ScreenPercentage {
   //Screen dimension percentages based on the current device running the app.
-  marginTopAFifthHalfScreen(0.1),
+  smoothMarginTop(0.05),
+  bigMarginTop(0.2),
   marginTopAForthHalfScreen(0.13), 
   sizedBoxAfterBemVindoIfeirinha(0.035), 
   formContainerVerticalPadding(0.023), 

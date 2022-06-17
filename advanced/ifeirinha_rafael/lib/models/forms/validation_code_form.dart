@@ -33,6 +33,7 @@ class _ValidationCodeFormState extends State<ValidationCodeForm> {
 
   @override
   void dispose() {
+    textFormField1FocusNode.dispose();
     textFormField2FocusNode.dispose();
     textFormField3FocusNode.dispose();
     textFormField4FocusNode.dispose();
