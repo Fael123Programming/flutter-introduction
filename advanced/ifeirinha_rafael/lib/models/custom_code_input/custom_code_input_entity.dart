@@ -44,7 +44,7 @@ class CustomCodeInputEntity extends StatelessWidget {
       ),
       child: TextFormField(
         onChanged: onChanged,
-        autofocus: true,
+        autofocus: autofocus,
         focusNode: focusNode,
         style: GoogleFonts.roboto(fontSize: 20),
         maxLength: 1,

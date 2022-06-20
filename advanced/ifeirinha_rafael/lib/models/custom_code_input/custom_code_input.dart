@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ifeirinha_rafael/models/screen_sizer/screen_sizer.dart';
 import 'package:ifeirinha_rafael/models/screen_sizer/screen_percentage.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:ifeirinha_rafael/models/custom_code_input/custom_code_input_entity.dart';
 
 class CustomCodeInput extends StatefulWidget {
