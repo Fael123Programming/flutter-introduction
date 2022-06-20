@@ -37,6 +37,8 @@ dependencies:
   google_fonts: ^3.0.1
   device_info_plus: ^3.2.4
   flutter_email_sender: ^5.1.0
+  shared_preferences: ^2.0.15
+
 
 dev_dependencies:
   flutter_test:
@@ -83,7 +85,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: CustomIcons
+    - family: icons/CustomIcons
       fonts:
         - asset:  fonts/ifeirinhaSplashScreenIcon.ttf
   #   - family: Schyler

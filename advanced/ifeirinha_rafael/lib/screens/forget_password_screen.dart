@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ifeirinha_rafael/models/headers/custom_header.dart';
 import 'package:ifeirinha_rafael/models/screen_sizer/screen_sizer.dart';
 import 'package:ifeirinha_rafael/models/screen_sizer/screen_percentage.dart';
 import 'package:ifeirinha_rafael/models/forms/forget_password_form.dart';
+import 'package:ifeirinha_rafael/models/app_bars/custom_app_bar.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);
@@ -17,56 +19,21 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenSizer screenSizer = ScreenSizer(context);
-    screenSizer.adjustHeightIfDeviceIsiOS();
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(
-          'Segurança',
-          style: GoogleFonts.roboto(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
+      appBar: CustomAppBar(),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.only(
-                  top: screenSizer.convertToDeviceScreenHeight(
-                    screenPercentage: ScreenPercentage.marginTopContainerTitle,
-                  ),
-                ),
-                child: Text(
-                  'Esqueci Minha Senha',
-                  style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 30,
-                  ),
-                ),
+            children: const [
+              CustomHeader(
+                title: 'Esqueci Minha Senha',
+                subtitle:
+                    'Digite o seu e-mail para receber o código de validação',
               ),
-              Container(
-                margin: EdgeInsets.only(
-                  top: screenSizer.convertToDeviceScreenHeight(
-                    screenPercentage: ScreenPercentage.marginTopContainerTitle,
-                  ),
-                ),
-                child: Text(
-                  'Digite o seu e-mail para receber o código de validação',
-                  style: GoogleFonts.openSans(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 11,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              const ForgetPasswordForm(),
+              ForgetPasswordForm(),
             ],
           ),
         ),

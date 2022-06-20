@@ -9,6 +9,7 @@ class ScreenSizer {
 
   ScreenSizer(this.context) {
     deviceSize = MediaQuery.of(context).size;
+    adjustHeightIfDeviceIsiOS();
   }
 
   void adjustHeightIfDeviceIsiOS() async {
@@ -21,11 +22,13 @@ class ScreenSizer {
     }
   }
 
-  double convertToDeviceScreenHeight({required ScreenPercentage screenPercentage}) {
+  double convertToDeviceScreenHeight(
+      {required ScreenPercentage screenPercentage}) {
     return deviceSize.height * screenPercentage.value;
   }
 
-  double convertToDeviceScreenWidth({required ScreenPercentage screenPercentage}) {
+  double convertToDeviceScreenWidth(
+      {required ScreenPercentage screenPercentage}) {
     return deviceSize.width * screenPercentage.value;
   }
 }

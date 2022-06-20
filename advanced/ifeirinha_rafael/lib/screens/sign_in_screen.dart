@@ -25,8 +25,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenSizer screenSizer = ScreenSizer(context);
-    screenSizer.adjustHeightIfDeviceIsiOS();
+    final screenSizer = ScreenSizer(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(

@@ -3,7 +3,8 @@ import 'package:ifeirinha_rafael/models/screen_sizer/screen_sizer.dart';
 import 'package:ifeirinha_rafael/models/screen_sizer/screen_percentage.dart';
 import 'package:ifeirinha_rafael/validation/validator.dart';
 import 'package:ifeirinha_rafael/screens/forget_password_screen.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:ifeirinha_rafael/models/buttons/big_button.dart';
+import 'package:ifeirinha_rafael/screens/sign_in_screen.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -21,8 +22,7 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenSizer screenSizer = ScreenSizer(context);
-    screenSizer.adjustHeightIfDeviceIsiOS();
+    final screenSizer = ScreenSizer(context);
     return Column(
       children: [
         Container(
@@ -77,12 +77,14 @@ class _SignInFormState extends State<SignInForm> {
                       isDense: true,
                       suffixIcon: IconButton(
                         onPressed: () {
-                          setState(() {
-                            obscurePassword = !obscurePassword;
-                            passwordIconData = obscurePassword
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined;
-                          });
+                          setState(
+                            () {
+                              obscurePassword = !obscurePassword;
+                              passwordIconData = obscurePassword
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined;
+                            },
+                          );
                         },
                         icon: Icon(passwordIconData),
                       ),
@@ -100,8 +102,7 @@ class _SignInFormState extends State<SignInForm> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    const ForgetPasswordScreen(),
+                builder: (context) => const ForgetPasswordScreen(),
               ),
             );
           },
@@ -123,48 +124,33 @@ class _SignInFormState extends State<SignInForm> {
             ),
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(
-            top: screenSizer.convertToDeviceScreenHeight(
-              screenPercentage: ScreenPercentage.bigButtonMarginTop,
-            ),
-          ),
-          width: screenSizer.convertToDeviceScreenWidth(
-            screenPercentage: ScreenPercentage.bigButtonWidth,
-          ),
-          height: screenSizer.convertToDeviceScreenHeight(
-            screenPercentage: ScreenPercentage.bigButtonHeight,
-          ),
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                Theme.of(context).colorScheme.primary,
-              ),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    screenSizer.convertToDeviceScreenWidth(
-                      screenPercentage: ScreenPercentage.bigButtonRadius,
-                    ),
+        BigButton(
+          text: 'Entrar',
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              String email = emailController.text;
+              String password = passwordController.text;
+              if (email == 'ifeirinha.nao.responda@gmail.com' &&
+                  password == 'ifgoiano123') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignInScreen(),
                   ),
-                ),
-              ),
-            ),
-            child: Text(
-              'Entrar',
-              style: GoogleFonts.roboto(
-                fontWeight: FontWeight.w500,
-                fontSize: 20,
-              ),
-            ),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Entrar'),
-                ),
-              );
-            },
-          ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Credenciais inválidas'),
+                  duration: Duration(seconds: 1),
+                ));
+              }
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('E-mail ou senha inválidos'),
+                duration: Duration(seconds: 1),
+              ));
+            }
+          },
         ),
       ],
     );
