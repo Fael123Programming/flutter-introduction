@@ -1,5 +1,5 @@
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:ifeirinha_rafael/models/email_sender/password_recovery_code_generator.dart';
+import 'package:ifeirinha_rafael/email_sender/password_recovery_code_generator.dart';
 
 class EmailSender {
   static void sendEmailTo(String email) async {

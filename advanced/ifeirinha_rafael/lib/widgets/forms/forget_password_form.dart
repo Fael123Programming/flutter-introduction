@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ifeirinha_rafael/models/screen_sizer/screen_sizer.dart';
-import 'package:ifeirinha_rafael/models/screen_sizer/screen_percentage.dart';
+import 'package:ifeirinha_rafael/screens/screen_sizer/screen_sizer.dart';
+import 'package:ifeirinha_rafael/screens/screen_sizer/screen_percentage.dart';
 import 'package:ifeirinha_rafael/validation/validator.dart';
 import 'package:ifeirinha_rafael/screens/validation_code_screen.dart';
-import 'package:ifeirinha_rafael/models/buttons/big_button.dart';
+import 'package:ifeirinha_rafael/widgets/buttons/big_button.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class ForgetPasswordForm extends StatefulWidget {

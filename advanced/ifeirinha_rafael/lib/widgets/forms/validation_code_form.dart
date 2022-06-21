@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ifeirinha_rafael/models/buttons/big_button.dart';
-import 'package:ifeirinha_rafael/models/screen_sizer/screen_sizer.dart';
-import 'package:ifeirinha_rafael/models/custom_code_input/custom_code_input.dart';
+import 'package:ifeirinha_rafael/widgets/buttons/big_button.dart';
+import 'package:ifeirinha_rafael/widgets/custom_code_input/custom_code_input.dart';
 import 'package:ifeirinha_rafael/screens/redefine_password_screen.dart';
 
 class ValidationCodeForm extends StatefulWidget {

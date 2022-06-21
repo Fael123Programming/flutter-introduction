@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:ifeirinha_rafael/models/headers/custom_header.dart';
-import 'package:ifeirinha_rafael/models/screen_sizer/screen_sizer.dart';
-import 'package:ifeirinha_rafael/models/screen_sizer/screen_percentage.dart';
-import 'package:ifeirinha_rafael/models/forms/forget_password_form.dart';
-import 'package:ifeirinha_rafael/models/app_bars/custom_app_bar.dart';
+import 'package:ifeirinha_rafael/widgets/headers/custom_header.dart';
+import 'package:ifeirinha_rafael/widgets/forms/forget_password_form.dart';
+import 'package:ifeirinha_rafael/widgets/app_bars/custom_app_bar.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ifeirinha_rafael/models/headers/custom_header.dart';
-import 'package:ifeirinha_rafael/models/app_bars/custom_app_bar.dart';
-import 'package:ifeirinha_rafael/models/forms/new_password_form.dart';
+import 'package:ifeirinha_rafael/widgets/headers/custom_header.dart';
+import 'package:ifeirinha_rafael/widgets/app_bars/custom_app_bar.dart';
+import 'package:ifeirinha_rafael/widgets/forms/new_password_form.dart';
 
 class RedefinePasswordScreen extends StatelessWidget {
   const RedefinePasswordScreen({Key? key}) : super(key: key);
