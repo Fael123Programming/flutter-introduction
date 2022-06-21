@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.rafael.ifeirinha_rafael">
    <application
-        android:label="ifeirinha_rafael"
+        android:label="IFeirinha"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

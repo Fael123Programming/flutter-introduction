@@ -49,4 +49,11 @@ class Validator {
         (!password.contains(RegExp(r'[a-z]')) ||
             !password.contains(RegExp(r'[A-Z]')));
   }
+
+  static String? validateName(String? name) {
+    if (name == null || name.isEmpty || hasSpace(name)) {
+      return 'Nome inválido';
+    }
+    return null;
+  }
 }

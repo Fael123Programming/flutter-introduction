@@ -1,12 +1,11 @@
 enum ScreenPercentage {
-  //Screen dimension percentages based on the current device running the app.
   smoothMarginTop(0.05),
-  bigMarginTop(0.2),
+  bigMarginTop(0.23),
   marginTopAForthHalfScreen(0.13),
   sizedBoxAfterBemVindoIfeirinha(0.035),
   formContainerVerticalPadding(0.023),
   formContainerHorizontalPadding(0.097),
-  marginInbetweenTextFormFields(0.017),
+  marginInbetweenTextFormFields(0.006),
   smoothMarginRight(0.097),
   bigButtonMarginTop(0.035),
   bigButtonWidth(0.51),
@@ -20,7 +19,6 @@ enum ScreenPercentage {
   customCodeInputHeight(0.12),
   customCodeInputVerticalMargin(0.017),
   customCodeInputHorizontalMargin(0.036);
-
 
   final double _value;
 

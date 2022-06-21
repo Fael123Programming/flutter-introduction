@@ -38,8 +38,9 @@ dependencies:
   device_info_plus: ^3.2.4
   flutter_email_sender: ^5.1.0
   shared_preferences: ^2.0.15
-
-
+  file_picker: ^4.6.1
+  image_picker: ^0.8.5+3
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -51,10 +52,16 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
   flutter_native_splash: ^2.1.0
+  flutter_launcher_icons: ^0.9.3
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "lib/icons/logo.png"
 
 flutter_native_splash:
   color: "#FFB20F"
-  image: lib/icons/ifeirinha.png
+  image: "lib/icons/ifeirinha.png"
   android: true
   ios: true
 # For information on the generic Dart part of this file, see the

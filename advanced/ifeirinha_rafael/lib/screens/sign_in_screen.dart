@@ -5,6 +5,7 @@ import 'package:ifeirinha_rafael/screens/screen_sizer/screen_sizer.dart';
 import 'package:ifeirinha_rafael/screens/screen_sizer/screen_percentage.dart';
 import 'package:ifeirinha_rafael/screens/sign_up_screen.dart';
 import 'package:ifeirinha_rafael/widgets/forms/sign_in_form.dart';
+
 //My phone's dimensions:
 //width: 411.42857142857144 (411.43)
 //height: 866.2857142857143 (866.3)

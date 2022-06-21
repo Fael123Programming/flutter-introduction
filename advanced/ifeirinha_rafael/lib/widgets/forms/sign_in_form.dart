@@ -32,9 +32,6 @@ class _SignInFormState extends State<SignInForm> {
             ),
           ),
           padding: EdgeInsets.symmetric(
-            vertical: screenSizer.convertToDeviceScreenHeight(
-              screenPercentage: ScreenPercentage.formContainerVerticalPadding,
-            ),
             horizontal: screenSizer.convertToDeviceScreenWidth(
               screenPercentage: ScreenPercentage.formContainerHorizontalPadding,
             ),
@@ -52,46 +49,40 @@ class _SignInFormState extends State<SignInForm> {
                     focusedBorder: OutlineInputBorder(),
                     border: OutlineInputBorder(),
                     hintText: 'E-mail',
+                    helperText: '',
                     hintStyle: TextStyle(color: Colors.grey),
                     isDense: true,
                   ),
                   validator: (email) => Validator.validateEmail(email),
                 ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: screenSizer.convertToDeviceScreenHeight(
-                      screenPercentage:
-                          ScreenPercentage.marginInbetweenTextFormFields,
+                SizedBox(height: screenSizer.convertToDeviceScreenHeight(screenPercentage: ScreenPercentage.marginInbetweenTextFormFields,),),
+                TextFormField(
+                  cursorColor: Colors.black,
+                  obscureText: obscurePassword,
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    errorBorder: const OutlineInputBorder(),
+                    focusedBorder: const OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
+                    hintText: 'Senha',
+                    helperText: '',
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    isDense: true,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(
+                          () {
+                            obscurePassword = !obscurePassword;
+                            passwordIconData = obscurePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined;
+                          },
+                        );
+                      },
+                      icon: Icon(passwordIconData),
                     ),
                   ),
-                  child: TextFormField(
-                    cursorColor: Colors.black,
-                    obscureText: obscurePassword,
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                      errorBorder: const OutlineInputBorder(),
-                      focusedBorder: const OutlineInputBorder(),
-                      border: const OutlineInputBorder(),
-                      hintText: 'Senha',
-                      hintStyle: const TextStyle(color: Colors.grey),
-                      isDense: true,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(
-                            () {
-                              obscurePassword = !obscurePassword;
-                              passwordIconData = obscurePassword
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined;
-                            },
-                          );
-                        },
-                        icon: Icon(passwordIconData),
-                      ),
-                    ),
-                    validator: (password) =>
-                        Validator.validatePassword(password),
-                  ),
+                  validator: (password) => Validator.validatePassword(password),
                 ),
               ],
             ),
