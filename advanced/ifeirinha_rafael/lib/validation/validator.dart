@@ -51,8 +51,8 @@ class Validator {
   }
 
   static String? validateName(String? name) {
-    if (name == null || name.isEmpty || hasSpace(name)) {
-      return 'Nome inválido';
+    if (name == null || name.isEmpty || name.trim().isEmpty) {
+      return 'Digite um nome válido';
     }
     return null;
   }

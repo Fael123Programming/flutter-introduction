@@ -59,7 +59,7 @@ class _NewPasswordFormState extends State<NewPasswordForm> {
                       ),
                       content: Text(
                         'Lembre-se de anotar sua nova senha em algum lugar para não esquecê-la',
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.justify,
                         style: GoogleFonts.roboto(),
                       ),
                       // contentTextStyle: GoogleFonts.roboto(fontSize: 10),
@@ -67,6 +67,7 @@ class _NewPasswordFormState extends State<NewPasswordForm> {
                         TextButton(
                           child: Text('Sim', style: GoogleFonts.roboto()),
                           onPressed: () {
+                            Navigator.pop(context);
                             Navigator.pop(context);
                             showDialog(
                               context: context,
@@ -84,7 +85,6 @@ class _NewPasswordFormState extends State<NewPasswordForm> {
                                         style: GoogleFonts.roboto(),
                                       ),
                                       onPressed: () {
-                                        Navigator.pop(context);
                                         Navigator.pop(context);
                                       },
                                     )

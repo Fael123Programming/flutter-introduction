@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ifeirinha_rafael/screens/screen_sizer/screen_percentage.dart';
 import 'package:ifeirinha_rafael/screens/screen_sizer/screen_sizer.dart';
@@ -6,22 +7,23 @@ import 'package:ifeirinha_rafael/validation/validator.dart';
 import 'package:ifeirinha_rafael/widgets/buttons/big_button.dart';
 import 'package:ifeirinha_rafael/widgets/image_input/image_input.dart';
 import 'package:ifeirinha_rafael/widgets/password_confirm/password_confirm.dart';
+import 'package:ifeirinha_rafael/widgets/use_terms_conditions/user_terms_conditions.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  _SignUpFormState createState() => _SignUpFormState();
+  SignUpFormState createState() => SignUpFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class SignUpFormState extends State<SignUpForm> {
   final formKey = GlobalKey<FormState>();
   final nameFieldController = TextEditingController();
   final emailFieldController = TextEditingController();
   final passwordField1Controller = TextEditingController();
   final passwordField2Controller = TextEditingController();
   bool listTileIconChecked = false;
-  Icon listTileIcon = Icon(Icons.check_box_outline_blank_outlined);
+  Icon listTileIcon = const Icon(Icons.check_box_outline_blank_outlined);
 
   @override
   Widget build(BuildContext context) {
@@ -53,19 +55,31 @@ class _SignUpFormState extends State<SignUpForm> {
                       isDense: true),
                   validator: (value) => Validator.validateName(value),
                 ),
-                TextFormField(
-                  controller: emailFieldController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    helperText: '',
-                    hintText: 'E-mail institucional',
-                    errorBorder: const OutlineInputBorder(),
-                    focusedBorder: const OutlineInputBorder(),
-                    border: const OutlineInputBorder(),
-                    hintStyle: GoogleFonts.roboto(color: Colors.grey),
-                    isDense: true,
+                Container(
+                  margin: EdgeInsets.only(
+                    top: screenSizer.convertToDeviceScreenHeight(
+                      screenPercentage:
+                          ScreenPercentage.marginInbetweenTextFormFields,
+                    ),
+                    bottom: screenSizer.convertToDeviceScreenHeight(
+                      screenPercentage:
+                          ScreenPercentage.marginInbetweenTextFormFields,
+                    ),
                   ),
-                  validator: (value) => Validator.validateEmail(value),
+                  child: TextFormField(
+                    controller: emailFieldController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      helperText: '',
+                      hintText: 'E-mail institucional',
+                      errorBorder: const OutlineInputBorder(),
+                      focusedBorder: const OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      hintStyle: GoogleFonts.roboto(color: Colors.grey),
+                      isDense: true,
+                    ),
+                    validator: (value) => Validator.validateEmail(value),
+                  ),
                 ),
                 PasswordConfirm(
                   passwordField1Controller: passwordField1Controller,
@@ -88,6 +102,32 @@ class _SignUpFormState extends State<SignUpForm> {
                             fontWeight: FontWeight.w600,
                             decoration: TextDecoration.underline,
                           ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Termos e Condições de Uso',
+                                      style: GoogleFonts.roboto(),
+                                    ),
+                                    content: SingleChildScrollView(
+                                      child: useTermsConditions,
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: Text(
+                                          'Ok',
+                                          style: GoogleFonts.roboto(),
+                                        ),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                         ),
                       ],
                     ),
@@ -102,7 +142,8 @@ class _SignUpFormState extends State<SignUpForm> {
                                 color: Colors.green,
                               )
                             : const Icon(
-                                Icons.check_box_outline_blank_outlined);
+                                Icons.check_box_outline_blank_outlined,
+                              );
                       },
                     );
                   },
@@ -110,9 +151,35 @@ class _SignUpFormState extends State<SignUpForm> {
               ],
             ),
           ),
-          BigButton(text: 'Cadastrar-se', onPressed: () {})
+          BigButton(
+            text: 'Cadastrar-se',
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                String msg = 'Cadastrado!';
+                if (listTileIconChecked) {
+                  Navigator.pop(context);
+                } else {
+                  msg =
+                      'É necessário que concorde com nossos termos e condições de uso';
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(msg),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+          )
         ],
       ),
     );
+  }
+
+  bool hasFormInformation() {
+    return nameFieldController.text.isNotEmpty ||
+        emailFieldController.text.isNotEmpty ||
+        passwordField1Controller.text.isNotEmpty ||
+        passwordField2Controller.text.isNotEmpty;
   }
 }

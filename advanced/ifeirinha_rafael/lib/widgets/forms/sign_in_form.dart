@@ -55,7 +55,12 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   validator: (email) => Validator.validateEmail(email),
                 ),
-                SizedBox(height: screenSizer.convertToDeviceScreenHeight(screenPercentage: ScreenPercentage.marginInbetweenTextFormFields,),),
+                SizedBox(
+                  height: screenSizer.convertToDeviceScreenHeight(
+                    screenPercentage:
+                        ScreenPercentage.marginInbetweenTextFormFields,
+                  ),
+                ),
                 TextFormField(
                   cursorColor: Colors.black,
                   obscureText: obscurePassword,
@@ -130,16 +135,20 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                 );
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Credenciais inválidas'),
-                  duration: Duration(seconds: 1),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Credenciais inválidas'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
               }
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('E-mail ou senha inválidos'),
-                duration: Duration(seconds: 1),
-              ));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('E-mail ou senha inválidos'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
             }
           },
         ),
