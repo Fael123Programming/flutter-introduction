@@ -7,7 +7,7 @@ void main() {
       debugShowCheckedModeBanner: false,
       home: const SignInScreen(),
       theme: ThemeData(
-        primaryColor: Colors.white,
+        primaryColor: Colors.red,
       ),
     ),
   );
