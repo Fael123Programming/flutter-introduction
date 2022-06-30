@@ -38,11 +38,9 @@ class CustomAppBarState extends State<CustomAppBar> {
         Container(
           margin: const EdgeInsets.only(top: 10, right: 20),
           child: Badge(
-            showBadge: showBadge,
+            showBadge: Provider.of<Cart>(context).items.isNotEmpty,
             badgeContent: Consumer<Cart>(
               builder: (context, cart, child) {
-                showBadge = cart.items.isNotEmpty;
-                print('');
                 return Text(
                   cart.items.length.toString(),
                   style: GoogleFonts.roboto(),
